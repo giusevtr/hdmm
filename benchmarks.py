@@ -154,7 +154,9 @@ def random_hdmm(name, number, seed=0):
     return data, measurements, workloads
 
 def all3way(name):
-    data = Dataset.load(name)
+    path = "{}.csv".format(name)
+    domain = "{}-domain.json".format(name)
+    data = Dataset.load(path, domain)
     proj = list(itertools.combinations(data.domain.attrs, 3))
     return data, proj
 
