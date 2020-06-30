@@ -107,7 +107,7 @@ if __name__ == '__main__':
     max_error = np.max(error_1)
     mean_error = np.mean(error_2)
 
-    print("eps = {}\tmax_error={}".format(args.epsilon, max_error))
+    print("eps = {}\tmax_error={:.4f}".format(args.epsilon, max_error))
     # print("mean_error", mean_error)
     # path = 'results/hdmm.csv'
     # with open(path, 'a') as f:
