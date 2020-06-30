@@ -102,8 +102,8 @@ if __name__ == '__main__':
         # W.dot(data.datavector())
         # proj = (A,B,D)
         # true[0] = (A=0 B=0 C=0)
-        true = W.dot(data.project(proj).datavector())/N
-        fake = ans / N
+        true = W.dot(data.project(proj).datavector())
+        fake = ans
         # fake = ans / N
         print("true: ", true[:10])
         print("true.dim = ", true.shape)
