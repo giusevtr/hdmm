@@ -33,8 +33,8 @@ def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, engi
         noise = laplace(loc=0, scale=l1 / eps)
 
     x_bar_answers = []
-    answers = []
-    for (proj, A), (_, W) in zip(measurements, workloads):
+    local_ls = {}
+    for proj, A in measurements:
         x = dataset.project(proj).datavector()
         z = noise.rvs(size=A.shape[0], random_state=state)
         a = A.dot(x)
@@ -49,7 +49,11 @@ def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, engi
         # print("A_inv.shape =", A_inv.shape)
         x_bar = lsmr(A, y)[0]
 
-        ans = W.dot(x_bar)
+        local_ls[proj] = lsmr(A, y)[0]
+
+    answers = []
+    for proj, W in workloads:
+        ans = W.dot(local_ls[proj])
         answers.append((ans, proj))
 
     return answers
@@ -96,6 +100,8 @@ if __name__ == '__main__':
     for (ans, proj) in answers:
         true = data.project(proj).datavector()/N
         fake = ans / np.abs(ans).sum()
+        print("true: ", true[:10])
+        print("fake: ", fake[:10])
         error_l_inf = np.max(np.abs(fake - true))
         # error_l_inf = np.max(np.abs(ans - true)) / N
         err = np.abs(fake - true).sum()
