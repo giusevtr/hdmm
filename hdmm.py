@@ -96,16 +96,19 @@ if __name__ == '__main__':
     error_1 = []
     error_2 = []
     for (y, proj, W) in answers:
-        # print("proj", proj)
+        # Error type 1
         data_proj = data.project(proj).datavector()
-        error_type_1 = np.max(np.abs(data_proj/N - y/np.sum(y)))
+        y_normalized = y.copy()
+        y_normalized[y_normalized < 0] = 0
+        y_normalized = y_normalized/np.sum(y_normalized)
+        error_type_1 = np.max(np.abs(data_proj/N - y_normalized))
+        error_1.append(error_type_1)
+
+        # Error type 2
         true = W.dot(data_proj)
         est = W.dot(y)
         error_type_2 = np.max(np.abs(true - est))
-        error_1.append(error_type_1)
         error_2.append(error_type_2)
-        # print("true.sum = ", (true).sum())
-        # print("abs(true).sum = ", np.abs(true).sum())
 
     max_error_1 = np.max(error_1)
     max_error_2 = np.mean(error_2)
