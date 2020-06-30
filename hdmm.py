@@ -39,15 +39,12 @@ def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, engi
         z = noise.rvs(size=A.shape[0], random_state=state)
         a = A.dot(x)
         y = a + z
-        # print("W.shape =", W.shape)
-        # print("x.shape =", x.shape)
-        # print("a.shape =", a.shape)
-        # print("y.shape =", y.shape)
+
         # print("A.shape =", A.shape)
         # print(y)
         # A_inv = np.linalg.pinv(A)
         # print("A_inv.shape =", A_inv.shape)
-        x_bar = lsmr(A, y)[0]
+        # x_bar = lsmr(A, y)[0]
 
         local_ls[proj] = lsmr(A, y)[0]
 
@@ -100,10 +97,10 @@ if __name__ == '__main__':
     for (ans, proj) in answers:
         true = data.project(proj).datavector()/N
         fake = ans / np.abs(ans).sum()
-        # print("true: ", true[:10])
-        print("true.sum: ", true.sum())
-        # print("fake: ", fake[:10])
-        print("fake.sum: ", fake.sum())
+        print("true: ", true[:10])
+        # print("true.sum: ", true.sum())
+        print("ans: ", ans[:10])
+        # print("fake.sum: ", fake.sum())
         error_l_inf = np.max(np.abs(fake - true))
         # error_l_inf = np.max(np.abs(ans - true)) / N
         err = np.abs(fake - true).sum()
