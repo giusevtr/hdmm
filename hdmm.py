@@ -104,9 +104,10 @@ if __name__ == '__main__':
         fake = ans / N
         print("true: ", true[:10])
         print("true.dim = ", true.shape)
-        # print("true.sum: ", true.sum())
+        print("true.sum: ", true.sum())
         # print("ans: ", ans[:10]/N)
         print("fake: ", fake[:10])
+        print("fake.dim: ", fake.shape)
         print("fake.sum: ", fake.sum())
         error_l_inf = np.max(np.abs(fake - true))
         # error_l_inf = np.max(np.abs(ans - true)) / N
