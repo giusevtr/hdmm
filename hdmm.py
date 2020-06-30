@@ -95,6 +95,7 @@ if __name__ == '__main__':
     error_1 = []
     error_2 = []
     for (ans, proj) in answers:
+        print("proj", proj)
         # W.dot(data.datavector())
         # proj = (A,B,D)
         # true[0] = (A=0 B=0 C=0)
