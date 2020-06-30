@@ -6,7 +6,7 @@ from scipy.sparse.linalg import lsmr
 import argparse
 from scipy.stats import norm, laplace
 
-def run(dataset, workloads, measurements, eps=1.0, delta=0.0, bounded=True, engine='MD',
+def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, engine='MD',
         options={}, iters=10000, seed=None, metric='L2', elim_order=None, frequency=1):
     """
     Run a mechanism that measures the given measurements and runs inference.
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     data, measurements, workloads = benchmarks.random_hdmm(args.dataset, args.workload)
     N = data.df.shape[0]
     # model, log, answers = mechanism.run(data, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
-    answers = run(data, workloads, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
+    answers = run(data,  measurements, workloads, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
 
 
     error_1 = []
@@ -99,6 +99,8 @@ if __name__ == '__main__':
         err = np.abs(ans - true).sum() / np.abs(true).sum()
         error_1.append(error_l_inf)
         error_2.append(err)
+        print("true.sum = ", (true).sum())
+        print("abs(true).sum = ", np.abs(true).sum())
 
     max_error = np.max(error_1)
     mean_error = np.mean(error_2)
