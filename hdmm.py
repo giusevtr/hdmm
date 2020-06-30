@@ -95,7 +95,7 @@ if __name__ == '__main__':
     answers = run(data,  measurements, workloads, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
 
     print("True answers: ")
-    for proj in workloads:
+    for proj, W in workloads:
         dp = data.project(proj).datavector()
         print(dp[:10])
     print("============")
