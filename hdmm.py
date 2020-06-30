@@ -5,6 +5,8 @@ import numpy as np
 from scipy.sparse.linalg import lsmr
 import argparse
 from scipy.stats import norm, laplace
+import time
+
 
 def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, engine='MD',
         options={}, iters=10000, seed=None, metric='L2', elim_order=None, frequency=1):
@@ -86,7 +88,7 @@ if __name__ == '__main__':
 
     parser.set_defaults(**default_params())
     args = parser.parse_args()
-
+    start_time = time.time()
     data, measurements, workloads = benchmarks.random_hdmm(args.dataset, args.workload)
     N = data.df.shape[0]
     # model, log, answers = mechanism.run(data, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
@@ -113,7 +115,8 @@ if __name__ == '__main__':
     max_error_1 = np.max(error_1)
     max_error_2 = np.mean(error_2)
 
-    print("eps = {}\terror_1={:.4f}\terror_2={:.4f}".format(args.epsilon, max_error_1, max_error_2))
+    print("eps = {}\terror_1={:.4f}\terror_2={:.4f},\time={:.4f}".format(args.epsilon, max_error_1, max_error_2, time.time()-start_time))
+
     # print("mean_error", mean_error)
     # path = 'results/hdmm.csv'
     # with open(path, 'a') as f:
