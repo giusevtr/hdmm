@@ -95,10 +95,9 @@ if __name__ == '__main__':
     error_2 = []
     for (ans, proj) in answers:
         true = data.project(proj).datavector()
-        error_inf = np.max(np.abs(ans - true)) / N
-        max_error_1 = max(max_error_1, error_inf)
+        error_l_inf = np.max(np.abs(ans - true)) / N
         err = np.abs(ans - true).sum() / np.abs(true).sum()
-        error_1.append(max_error_1)
+        error_1.append(error_l_inf)
         error_2.append(err)
 
 
