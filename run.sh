@@ -1,6 +1,6 @@
 #!/bin/bash
 wl=120
-ds="adult"
+ds="loans"
 python hdmm.py --dataset=$ds --workload=15 --epsilon=0.1
 python hdmm.py --dataset=$ds --workload=30 --epsilon=0.1
 python hdmm.py --dataset=$ds --workload=60 --epsilon=0.1
