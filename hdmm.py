@@ -40,8 +40,8 @@ def run(dataset, workloads, measurements, eps=1.0, delta=0.0, bounded=True, engi
         a = A.dot(x)
         y = a + z
         # print("W.shape =", W.shape)
-        print("x.shape =", x.shape)
-        print("a.shape =", a.shape)
+        # print("x.shape =", x.shape)
+        # print("a.shape =", a.shape)
         # print("y.shape =", y.shape)
         # print("A.shape =", A.shape)
         # print(y)
@@ -103,8 +103,8 @@ if __name__ == '__main__':
     max_error = np.max(error_1)
     mean_error = np.mean(error_2)
 
-    print("max_error", max_error)
-    print("mean_error", mean_error)
+    print("eps = {}\tmax_error={}".format(args.epsilon, max_error))
+    # print("mean_error", mean_error)
     # path = 'results/hdmm.csv'
     # with open(path, 'a') as f:
     #     f.write('%s,%s,%s,%s,%s,%s,%s,%s,%s \n' % (args.dataset,args.seed,args.epsilon,err_hdmm1, err_pgm1, err_hdmm2, err_pgm2, err_pgm1a, err_pgm2a))
