@@ -100,11 +100,8 @@ if __name__ == '__main__':
         error_1.append(error_l_inf)
         error_2.append(err)
 
-
-
     max_error = np.max(error_1)
     mean_error = np.mean(error_2)
-
 
     print("max_error", max_error)
     print("mean_error", mean_error)
