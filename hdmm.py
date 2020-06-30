@@ -92,6 +92,7 @@ if __name__ == '__main__':
     answers = run(data,  measurements, workloads, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
 
 
+    print("data.domain", data.domain)
     error_1 = []
     error_2 = []
     for (ans, proj) in answers:
