@@ -87,6 +87,7 @@ if __name__ == '__main__':
 
     data, measurements, workloads = benchmarks.random_hdmm(args.dataset, args.workload)
     N = data.df.shape[0]
+    print(args.epsilon)
     # model, log, answers = mechanism.run(data, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
     answers = run(data, workloads, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
 
