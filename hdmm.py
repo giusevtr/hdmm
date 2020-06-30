@@ -95,9 +95,12 @@ if __name__ == '__main__':
     error_1 = []
     error_2 = []
     for (ans, proj) in answers:
+        # proj = (A,B,D)
+        # true[0] = (A=0 B=0 C=0)
         true = data.project(proj).datavector()/N
         fake = ans / N
         print("true: ", true[:10])
+        print("true.dim = ", true.shape)
         # print("true.sum: ", true.sum())
         # print("ans: ", ans[:10]/N)
         print("fake: ", fake[:10])
