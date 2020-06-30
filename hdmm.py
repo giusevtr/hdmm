@@ -94,6 +94,11 @@ if __name__ == '__main__':
     # model, log, answers = mechanism.run(data, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
     answers = run(data,  measurements, workloads, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
 
+    print("True answers: ")
+    for proj in workloads:
+        dp = data.project(proj).datavector()
+        print(dp[:10])
+    print("============")
 
     error_1 = []
     error_2 = []
@@ -101,7 +106,6 @@ if __name__ == '__main__':
         # Error type 1
         data_proj = data.project(proj).datavector()
         y_normalized = y.copy()
-        # y_normalized[y_normalized < 0] = 0
         y_normalized = y_normalized/N
         error_type_1 = np.max(np.abs(data_proj/N - y_normalized))
         error_1.append(error_type_1)
@@ -109,7 +113,7 @@ if __name__ == '__main__':
         # Error type 2
         true = W.dot(data_proj)
         est = W.dot(y)
-        error_type_2 = np.max(np.abs(true - est))
+        error_type_2 = np.mean(np.abs(true - est))
         error_2.append(error_type_2)
 
     max_error_1 = np.max(error_1)
