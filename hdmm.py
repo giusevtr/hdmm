@@ -1,0 +1,115 @@
+from mbi import mechanism, FactoredInference
+import benchmarks
+from IPython import embed
+import numpy as np
+from scipy.sparse.linalg import lsmr
+import argparse
+from scipy.stats import norm, laplace
+
+def run(dataset, measurements, eps=1.0, delta=0.0, bounded=True, engine='MD',
+        options={}, iters=10000, seed=None, metric='L2', elim_order=None, frequency=1, workload=None):
+    """
+    Run a mechanism that measures the given measurements and runs inference.
+    This is a convenience method for running end-to-end experiments.
+    """
+    state = np.random.RandomState(seed)
+    l1 = 0
+    l2 = 0
+    for _, W, Q in measurements:
+        l1 += np.abs(Q).sum(axis=0).max()
+        try:
+            l2 += Q.power(2).sum(axis=0).max()  # for spares matrices
+        except:
+            l2 += np.square(Q).sum(axis=0).max()  # for dense matrices
+
+    if bounded:
+        total = dataset.df.shape[0]
+        l1 *= 2
+        l2 *= 2
+
+    if delta > 0:
+        noise = norm(loc=0, scale=np.sqrt(l2 * 2 * np.log(2 / delta)) / eps)
+    else:
+        noise = laplace(loc=0, scale=l1 / eps)
+
+    x_bar_answers = []
+    answers = []
+    for (proj, A), (_, W) in zip(measurements):
+        x = dataset.project(proj).datavector()
+        z = noise.rvs(size=A.shape[0], random_state=state)
+        a = A.dot(x)
+        y = a + z
+        # print("W.shape =", W.shape)
+        print("x.shape =", x.shape)
+        print("a.shape =", a.shape)
+        # print("y.shape =", y.shape)
+        # print("A.shape =", A.shape)
+        # print(y)
+        # A_inv = np.linalg.pinv(A)
+        # print("A_inv.shape =", A_inv.shape)
+        x_bar = lsmr(A, y)[0]
+
+        ans = W.dot(x_bar)
+        answers.append((ans, proj))
+
+    return answers
+
+
+def default_params():
+    """
+    Return default parameters to run this program
+
+    :returns: a dictionary of default parameter settings for each command line argument
+    """
+    params = {}
+    params['dataset'] = 'adult'
+    params['workload'] = 15
+    params['iters'] = 10000
+    params['epsilon'] = 1.0
+    params['seed'] = 0
+    params['save'] = None
+
+    return params
+
+if __name__ == '__main__':
+    description = ''
+    formatter = argparse.ArgumentDefaultsHelpFormatter
+    parser = argparse.ArgumentParser(description=description, formatter_class=formatter)
+    parser.add_argument('--dataset', choices=['adult','titanic','msnbc','loans','nltcs','fire','stroke','salary'], help='dataset to use')
+    parser.add_argument('--workload', type=int, help='number of marginals in workload')
+    parser.add_argument('--iters', type=int, help='number of optimization iterations')
+    parser.add_argument('--epsilon', type=float, help='privacy  parameter')
+    parser.add_argument('--seed', type=int, help='random seed')
+    parser.add_argument('--save', action='store_true', help='save results')
+
+    parser.set_defaults(**default_params())
+    args = parser.parse_args()
+
+    data, measurements, workloads = benchmarks.random_hdmm(args.dataset, args.workload)
+    N = data.df.shape[0]
+    # model, log, answers = mechanism.run(data, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
+    answers = run(data, workloads, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
+
+
+    error_1 = []
+    error_2 = []
+    for (ans, proj) in answers:
+        true = data.project(proj).datavector()
+        error_inf = np.max(np.abs(ans - true)) / N
+        max_error_1 = max(max_error_1, error_inf)
+        err = np.abs(ans - true).sum() / np.abs(true).sum()
+        error_1.append(max_error_1)
+        error_2.append(err)
+
+
+
+    max_error = np.max(error_1)
+    mean_error = np.mean(error_2)
+
+
+    print("max_error", max_error)
+    print("mean_error", mean_error)
+    # path = 'results/hdmm.csv'
+    # with open(path, 'a') as f:
+    #     f.write('%s,%s,%s,%s,%s,%s,%s,%s,%s \n' % (args.dataset,args.seed,args.epsilon,err_hdmm1, err_pgm1, err_hdmm2, err_pgm2, err_pgm1a, err_pgm2a))
+    #
