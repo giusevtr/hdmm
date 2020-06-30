@@ -6,8 +6,8 @@ from scipy.sparse.linalg import lsmr
 import argparse
 from scipy.stats import norm, laplace
 
-def run(dataset, measurements, eps=1.0, delta=0.0, bounded=True, engine='MD',
-        options={}, iters=10000, seed=None, metric='L2', elim_order=None, frequency=1, workload=None):
+def run(dataset, workloads, measurements, eps=1.0, delta=0.0, bounded=True, engine='MD',
+        options={}, iters=10000, seed=None, metric='L2', elim_order=None, frequency=1):
     """
     Run a mechanism that measures the given measurements and runs inference.
     This is a convenience method for running end-to-end experiments.
@@ -34,7 +34,7 @@ def run(dataset, measurements, eps=1.0, delta=0.0, bounded=True, engine='MD',
 
     x_bar_answers = []
     answers = []
-    for (proj, A), (_, W) in zip(measurements):
+    for (proj, A), (_, W) in zip(measurements, workloads):
         x = dataset.project(proj).datavector()
         z = noise.rvs(size=A.shape[0], random_state=state)
         a = A.dot(x)
@@ -87,7 +87,6 @@ if __name__ == '__main__':
 
     data, measurements, workloads = benchmarks.random_hdmm(args.dataset, args.workload)
     N = data.df.shape[0]
-    print(args.epsilon)
     # model, log, answers = mechanism.run(data, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
     answers = run(data, workloads, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
 
