@@ -100,7 +100,7 @@ if __name__ == '__main__':
         data_proj = data.project(proj).datavector()
         y_normalized = y.copy()
         y_normalized[y_normalized < 0] = 0
-        y_normalized = y_normalized/np.sum(y_normalized)
+        y_normalized = y_normalized/N
         error_type_1 = np.max(np.abs(data_proj/N - y_normalized))
         error_1.append(error_type_1)
 
