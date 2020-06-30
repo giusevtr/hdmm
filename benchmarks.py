@@ -168,7 +168,9 @@ def small3way(name, number):
 
 def random3way(name, number, seed=0):
     prng = np.random.RandomState(seed)
-    data = Dataset.load(name)
+    path = "{}.csv".format(name)
+    domain = "{}-domain.json".format(name)
+    data = Dataset.load(path, domain)
     total = data.df.shape[0]
     dom = data.domain
     proj = [p for p in itertools.combinations(data.domain.attrs, 3) if dom.size(p) <= total]
