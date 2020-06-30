@@ -40,9 +40,9 @@ def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, engi
         a = A.dot(x)
         y = a + z
 
-        print("=====")
-        print("x.shape =", x.shape)
-        print("a.shape =", a.shape)
+        # print("=====")
+        # print("x.shape =", x.shape)
+        # print("a.shape =", a.shape)
         # print(y)
         # A_inv = np.linalg.pinv(A)
         # print("A_inv.shape =", A_inv.shape)
@@ -93,7 +93,6 @@ if __name__ == '__main__':
     answers = run(data,  measurements, workloads, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
 
 
-    print("data.domain", data.domain)
     error_1 = []
     error_2 = []
     for (y, proj, W) in answers:
