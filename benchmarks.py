@@ -173,7 +173,7 @@ def random3way(name, number, seed=0):
     data = Dataset.load(path, domain)
     total = data.df.shape[0]
     dom = data.domain
-    proj = [p for p in itertools.combinations(data.domain.attrs, 5) if dom.size(p) <= total]
+    proj = [p for p in itertools.combinations(data.domain.attrs, 3) if dom.size(p) <= total]
     if len(proj) > number:
         proj = [proj[i] for i in prng.choice(len(proj), number, replace=False)]
     return data, proj
