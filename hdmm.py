@@ -15,7 +15,7 @@ def run(dataset, workloads, measurements, eps=1.0, delta=0.0, bounded=True, engi
     state = np.random.RandomState(seed)
     l1 = 0
     l2 = 0
-    for _, W, Q in measurements:
+    for _, Q in measurements:
         l1 += np.abs(Q).sum(axis=0).max()
         try:
             l2 += Q.power(2).sum(axis=0).max()  # for spares matrices
