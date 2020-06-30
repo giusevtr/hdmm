@@ -97,9 +97,9 @@ if __name__ == '__main__':
     error_1 = []
     error_2 = []
     for (y, proj, W) in answers:
-        print("proj", proj)
+        # print("proj", proj)
         data_proj = data.project(proj).datavector()
-        error_type_1 = np.max(np.abs(data_proj - y))
+        error_type_1 = np.max(np.abs(data_proj/N - y/np.sum(y)))
         true = W.dot(data_proj)
         est = W.dot(y)
         error_type_2 = np.max(np.abs(true - est))
