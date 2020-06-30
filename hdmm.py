@@ -53,7 +53,7 @@ def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, engi
     answers = []
     for proj, W in workloads:
         ans = W.dot(local_ls[proj])
-        answers.append((ans, proj))
+        answers.append((ans, proj, W))
 
     return answers
 
@@ -97,12 +97,12 @@ if __name__ == '__main__':
     print("data.domain", data.domain)
     error_1 = []
     error_2 = []
-    for (ans, proj) in answers:
+    for (ans, proj, W) in answers:
         print("proj", proj)
         # W.dot(data.datavector())
         # proj = (A,B,D)
         # true[0] = (A=0 B=0 C=0)
-        true = data.project(proj).datavector()/N
+        true = W.dot(data.project(proj).datavector())/N
         fake = ans / N
         # fake = ans / N
         print("true: ", true[:10])
