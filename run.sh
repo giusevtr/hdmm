@@ -1,9 +1,10 @@
 #!/bin/bash
-
-python hdmm.py --dataset=loans --workload=24 --epsilon=0.1
-python hdmm.py --dataset=loans --workload=24 --epsilon=0.15
-python hdmm.py --dataset=loans --workload=24 --epsilon=0.2
-python hdmm.py --dataset=loans --workload=24 --epsilon=0.25
-python hdmm.py --dataset=loans --workload=24 --epsilon=0.5
-python hdmm.py --dataset=loans --workload=24 --epsilon=1
-python hdmm.py --dataset=loans --workload=24 --epsilon=20000
+wl=120
+ds=adult
+python hdmm.py --dataset='$ds' --workload='$wl' --epsilon=0.1
+python hdmm.py --dataset='$ds' --workload='$wl' --epsilon=0.15
+python hdmm.py --dataset='$ds' --workload='$wl' --epsilon=0.2
+python hdmm.py --dataset='$ds' --workload='$wl' --epsilon=0.25
+python hdmm.py --dataset='$ds' --workload='$wl' --epsilon=0.5
+python hdmm.py --dataset='$ds' --workload='$wl' --epsilon=1
+python hdmm.py --dataset='$ds' --workload='$wl' --epsilon=20000
