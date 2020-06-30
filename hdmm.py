@@ -40,7 +40,9 @@ def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, engi
         a = A.dot(x)
         y = a + z
 
-        # print("A.shape =", A.shape)
+        print("=====")
+        print("x.shape =", x.shape)
+        print("a.shape =", a.shape)
         # print(y)
         # A_inv = np.linalg.pinv(A)
         # print("A_inv.shape =", A_inv.shape)
@@ -102,6 +104,7 @@ if __name__ == '__main__':
         # true[0] = (A=0 B=0 C=0)
         true = data.project(proj).datavector()/N
         fake = ans / N
+        # fake = ans / N
         print("true: ", true[:10])
         print("true.dim = ", true.shape)
         print("true.sum: ", true.sum())
