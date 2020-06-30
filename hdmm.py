@@ -52,8 +52,7 @@ def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, engi
 
     answers = []
     for proj, W in workloads:
-        ans = W.dot(local_ls[proj])
-        answers.append((ans, proj, W))
+        answers.append((local_ls[proj], proj, W))
 
     return answers
 
@@ -97,33 +96,22 @@ if __name__ == '__main__':
     print("data.domain", data.domain)
     error_1 = []
     error_2 = []
-    for (ans, proj, W) in answers:
+    for (y, proj, W) in answers:
         print("proj", proj)
-        # W.dot(data.datavector())
-        # proj = (A,B,D)
-        # true[0] = (A=0 B=0 C=0)
-        true = W.dot(data.project(proj).datavector())
-        fake = ans
-        # fake = ans / N
-        print("true: ", true[:10])
-        print("true.dim = ", true.shape)
-        print("true.sum: ", true.sum())
-        # print("ans: ", ans[:10]/N)
-        print("fake: ", fake[:10])
-        print("fake.dim: ", fake.shape)
-        print("fake.sum: ", fake.sum())
-        error_l_inf = np.max(np.abs(fake - true))
-        # error_l_inf = np.max(np.abs(ans - true)) / N
-        err = np.abs(fake - true).sum()
-        error_1.append(error_l_inf)
-        error_2.append(err)
+        data_proj = data.project(proj).datavector()
+        error_type_1 = np.max(np.abs(data_proj - y))
+        true = W.dot(data_proj)
+        est = W.dot(y)
+        error_type_2 = np.max(np.abs(true - est))
+        error_1.append(error_type_1)
+        error_2.append(error_type_2)
         # print("true.sum = ", (true).sum())
         # print("abs(true).sum = ", np.abs(true).sum())
 
-    max_error = np.max(error_1)
-    mean_error = np.mean(error_2)
+    max_error_1 = np.max(error_1)
+    max_error_2 = np.mean(error_2)
 
-    print("eps = {}\tmax_error={:.4f}".format(args.epsilon, max_error))
+    print("eps = {}\terror_1={:.4f}\terror_2={:.4f}".format(args.epsilon, max_error_1, max_error_2))
     # print("mean_error", mean_error)
     # path = 'results/hdmm.csv'
     # with open(path, 'a') as f:
