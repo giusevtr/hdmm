@@ -100,8 +100,10 @@ if __name__ == '__main__':
     for (ans, proj) in answers:
         true = data.project(proj).datavector()/N
         fake = ans / np.abs(ans).sum()
-        print("true: ", true[:10])
-        print("fake: ", fake[:10])
+        # print("true: ", true[:10])
+        print("true.sum: ", true.sum())
+        # print("fake: ", fake[:10])
+        print("fake.sum: ", fake.sum())
         error_l_inf = np.max(np.abs(fake - true))
         # error_l_inf = np.max(np.abs(ans - true)) / N
         err = np.abs(fake - true).sum()
