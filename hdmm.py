@@ -94,13 +94,15 @@ if __name__ == '__main__':
     error_1 = []
     error_2 = []
     for (ans, proj) in answers:
-        true = data.project(proj).datavector()
-        error_l_inf = np.max(np.abs(ans - true)) / N
-        err = np.abs(ans - true).sum() / np.abs(true).sum()
+        true = data.project(proj).datavector()/N
+        fake = ans / np.abs(ans).sum()
+        error_l_inf = np.max(np.abs(fake - true))
+        # error_l_inf = np.max(np.abs(ans - true)) / N
+        err = np.abs(fake - true).sum()
         error_1.append(error_l_inf)
         error_2.append(err)
-        print("true.sum = ", (true).sum())
-        print("abs(true).sum = ", np.abs(true).sum())
+        # print("true.sum = ", (true).sum())
+        # print("abs(true).sum = ", np.abs(true).sum())
 
     max_error = np.max(error_1)
     mean_error = np.mean(error_2)
