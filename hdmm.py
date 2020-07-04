@@ -78,6 +78,7 @@ if __name__ == '__main__':
 
     parser.set_defaults(**default_params())
     args = parser.parse_args()
+    print(args)
     start_time = time.time()
     data, measurements, workloads = benchmarks.random_hdmm(args.dataset, args.workload, args.marginal)
     N = data.df.shape[0]
@@ -103,7 +104,7 @@ if __name__ == '__main__':
     max_error_2 = np.mean(error_2)
 
     print("eps = {}\terror_1={:.4f}\terror_2={:.4f},\time={:.4f}".format(args.epsilon, max_error_1, max_error_2, time.time()-start_time))
-    file_name = "Results/{}_{}_{}.csv".format(args.dataset[0], args.workload[0], args.marginal[0])
+    file_name = "Results/{}_{}_{}.csv".format(args.dataset, args.workload, args.marginal)
     print("Saving ", file_name)
     names = ["epsilon", "error", "runtime"]
     final_df = pd.DataFrame([args.epsilon, max_error_1, time.time()-start_time], columns=names)
