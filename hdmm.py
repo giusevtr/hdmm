@@ -1,15 +1,14 @@
-from mbi import mechanism, FactoredInference
 import benchmarks
-from IPython import embed
+import os
 import numpy as np
 from scipy.sparse.linalg import lsmr
 import argparse
 from scipy.stats import norm, laplace
 import time
+import pandas as pd
 
 
-def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, engine='MD',
-        options={}, iters=10000, seed=None, metric='L2', elim_order=None, frequency=1):
+def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, seed=None):
     """
     Run a mechanism that measures the given measurements and runs inference.
     This is a convenience method for running end-to-end experiments.
@@ -81,6 +80,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=description, formatter_class=formatter)
     parser.add_argument('--dataset', choices=['adult','titanic','msnbc','loans','nltcs','fire','stroke','salary'], help='dataset to use')
     parser.add_argument('--workload', type=int, help='number of marginals in workload')
+    parser.add_argument('--marginal', type=int, help='number of marginals in workload')
     parser.add_argument('--iters', type=int, help='number of optimization iterations')
     parser.add_argument('--epsilon', type=float, help='privacy  parameter')
     parser.add_argument('--seed', type=int, help='random seed')
@@ -89,24 +89,17 @@ if __name__ == '__main__':
     parser.set_defaults(**default_params())
     args = parser.parse_args()
     start_time = time.time()
-    data, measurements, workloads = benchmarks.random_hdmm(args.dataset, args.workload)
+    data, measurements, workloads = benchmarks.random_hdmm(args.dataset, args.workload, args.marginal)
     N = data.df.shape[0]
     # model, log, answers = mechanism.run(data, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
     answers = run(data,  measurements, workloads, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
-
-    print("True answers: ")
-    for proj, W in workloads:
-        dp = data.project(proj).datavector()
-        print(dp[:10])
-    print("============")
 
     error_1 = []
     error_2 = []
     for (y, proj, W) in answers:
         # Error type 1
         data_proj = data.project(proj).datavector()
-        y_normalized = y.copy()
-        y_normalized = y_normalized/N
+        y_normalized = y.copy()/N
         error_type_1 = np.max(np.abs(data_proj/N - y_normalized))
         error_1.append(error_type_1)
 
@@ -120,6 +113,14 @@ if __name__ == '__main__':
     max_error_2 = np.mean(error_2)
 
     print("eps = {}\terror_1={:.4f}\terror_2={:.4f},\time={:.4f}".format(args.epsilon, max_error_1, max_error_2, time.time()-start_time))
+    file_name = "Results/{}_{}_{}.csv".format(args.dataset[0], args.workload[0], args.marginal[0])
+    print("Saving ", file_name)
+    names = ["epsilon", "error"]
+    final_df = pd.DataFrame([args.epsilon, max_error_1], columns=names)
+    if os.path.exists(file_name):
+        dfprev = pd.read_csv(file_name)
+        final_df = final_df.append(dfprev, sort=False)
+    final_df.to_csv(file_name)
 
     # print("mean_error", mean_error)
     # path = 'results/hdmm.csv'

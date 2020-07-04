@@ -120,8 +120,8 @@ def adult_hdmm():
                    
     return data, measurements, workloads
 
-def random_hdmm(name, number, seed=0):
-    data, projections = random3way(name, number, seed)
+def random_hdmm(name, number, K, seed=0):
+    data, projections = randomKway(name, number, K, seed)
     lookup = {}
     lookup_W = {}
     
@@ -147,9 +147,9 @@ def random_hdmm(name, number, seed=0):
 
     for proj in projections:
         Q = reduce(sparse.kron, [lookup[a] for a in proj]).tocsr()
-        measurements.append( (proj, Q) )
+        measurements.append((proj, Q))
         W = matrix.Kronecker([lookup_W[a] for a in proj])
-        workloads.append( (proj, W) )
+        workloads.append((proj, W))
 
     return data, measurements, workloads
 
@@ -166,14 +166,14 @@ def small3way(name, number):
     proj = sorted(itertools.combinations(data.domain.attrs, 3), key=dom.size)[:number]
     return data, proj
 
-def random3way(name, number, seed=0):
+def randomKway(name, number, K, seed=0):
     prng = np.random.RandomState(seed)
     path = "{}.csv".format(name)
     domain = "{}-domain.json".format(name)
     data = Dataset.load(path, domain)
     total = data.df.shape[0]
     dom = data.domain
-    proj = [p for p in itertools.combinations(data.domain.attrs, 5) if dom.size(p) <= total]
+    proj = [p for p in itertools.combinations(data.domain.attrs, K) if dom.size(p) <= total]
     if len(proj) > number:
         proj = [proj[i] for i in prng.choice(len(proj), number, replace=False)]
     return data, proj
