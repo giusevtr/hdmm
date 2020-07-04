@@ -72,7 +72,6 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', choices=['adult','titanic','msnbc','loans','nltcs','fire','stroke','salary'], help='dataset to use')
     parser.add_argument('--workload', type=int, help='number of marginals in workload')
     parser.add_argument('--marginal', type=int, help='number of marginals in workload')
-    parser.add_argument('--iters', type=int, help='number of optimization iterations')
     parser.add_argument('--epsilon', type=float, help='privacy  parameter')
     parser.add_argument('--seed', type=int, help='random seed')
     parser.add_argument('--save', action='store_true', help='save results')
@@ -83,7 +82,7 @@ if __name__ == '__main__':
     data, measurements, workloads = benchmarks.random_hdmm(args.dataset, args.workload, args.marginal)
     N = data.df.shape[0]
     # model, log, answers = mechanism.run(data, measurements, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
-    answers = run(data,  measurements, workloads, eps=args.epsilon, delta=1.0/N**2, frequency=50, seed=args.seed, iters=args.iters)
+    answers = run(data,  measurements, workloads, eps=args.epsilon, delta=1.0/N**2, seed=args.seed)
 
     error_1 = []
     error_2 = []
