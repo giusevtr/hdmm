@@ -107,7 +107,7 @@ if __name__ == '__main__':
     file_name = "Results/{}_{}_{}.csv".format(args.dataset, args.workload, args.marginal)
     print("Saving ", file_name)
     names = ["epsilon", "error", "runtime"]
-    final_df = pd.DataFrame([args.epsilon, max_error_1, time.time()-start_time], columns=names)
+    final_df = pd.DataFrame([[args.epsilon, max_error_1, time.time()-start_time]], columns=names)
     if os.path.exists(file_name):
         dfprev = pd.read_csv(file_name)
         final_df = final_df.append(dfprev, sort=False)
