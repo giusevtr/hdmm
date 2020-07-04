@@ -40,15 +40,6 @@ def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, seed
         z = noise.rvs(size=A.shape[0], random_state=state)
         a = A.dot(x)
         y = a + z
-
-        # print("=====")
-        # print("x.shape =", x.shape)
-        # print("a.shape =", a.shape)
-        # print(y)
-        # A_inv = np.linalg.pinv(A)
-        # print("A_inv.shape =", A_inv.shape)
-        # x_bar = lsmr(A, y)[0]
-
         local_ls[proj] = lsmr(A, y)[0]
 
     answers = []
@@ -115,8 +106,8 @@ if __name__ == '__main__':
     print("eps = {}\terror_1={:.4f}\terror_2={:.4f},\time={:.4f}".format(args.epsilon, max_error_1, max_error_2, time.time()-start_time))
     file_name = "Results/{}_{}_{}.csv".format(args.dataset[0], args.workload[0], args.marginal[0])
     print("Saving ", file_name)
-    names = ["epsilon", "error"]
-    final_df = pd.DataFrame([args.epsilon, max_error_1], columns=names)
+    names = ["epsilon", "error", "runtime"]
+    final_df = pd.DataFrame([args.epsilon, max_error_1, time.time()-start_time], columns=names)
     if os.path.exists(file_name):
         dfprev = pd.read_csv(file_name)
         final_df = final_df.append(dfprev, sort=False)
