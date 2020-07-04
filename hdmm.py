@@ -8,7 +8,7 @@ import time
 import pandas as pd
 
 
-def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, seed=None):
+def run(dataset, measurements, workloads,  eps=1.0, delta=0.0, bounded=True, seed=None):
     """
     Run a mechanism that measures the given measurements and runs inference.
     This is a convenience method for running end-to-end experiments.
@@ -23,6 +23,7 @@ def run(dataset,measurements, workloads,  eps=1.0, delta=0.0, bounded=True, seed
         except:
             l2 += np.square(Q).sum(axis=0).max()  # for dense matrices
 
+    print("l1 = {:.4f}, l2 = {:.4f}".format(l1, l2))
     if bounded:
         total = dataset.df.shape[0]
         l1 *= 2
