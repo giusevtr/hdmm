@@ -114,9 +114,9 @@ def adult_hdmm():
 
     for proj in projections:
         Q = reduce(sparse.kron, [lookup[a] for a in proj]).tocsr()
-        measurements.append( (proj, Q) )
+        measurements.append((proj, Q))
         W = matrix.Kronecker([lookup_W[a] for a in proj])
-        workloads.append( (proj, W) )
+        workloads.append((proj, W))
                    
     return data, measurements, workloads
 
